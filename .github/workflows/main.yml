@@ -25,5 +25,9 @@ jobs:
       - name: Build Docker image
         run: docker build . -t my-app:latest
 
-      - name: Run Docker container
-        run: docker run my-app:latest
+      - name: Run Docker container in the background
+        run: docker run -d -p 80:80 my-app:latest
+
+      - name: Tunnel with Serveo
+        run: |
+          ssh -o StrictHostKeyChecking=no -R 80:localhost:80 serveo.net
