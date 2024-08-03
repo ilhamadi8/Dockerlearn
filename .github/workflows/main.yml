@@ -1,4 +1,4 @@
-name: Build and Run Docker Container on Windows
+name: Build and Run Docker Container
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -24,29 +24,10 @@ jobs:
 
       - name: Build Docker image
         run: docker build . -t my-app:latest
-        shell: pwsh
 
       - name: Run Docker container in the background
-        run: docker run -d -p 80:80 --name my-app-container my-app:latest
-        shell: pwsh
-
-      - name: Verify Docker container is running
-        run: docker ps -a
-        shell: pwsh
-
-      - name: Test connection to Docker container
-        run: |
-          Invoke-WebRequest -Uri http://localhost -UseBasicParsing
-        shell: pwsh
-        continue-on-error: true
-
-      - name: Install SSH for Serveo tunneling
-        run: |
-          choco install openssh -y
-          Start-Service ssh-agent
-        shell: cmd
+        run: docker run -d -p 8000:8000 my-app:latest
 
       - name: Tunnel with Serveo
         run: |
-          Start-Process -NoNewWindow -FilePath "ssh" -ArgumentList "-o StrictHostKeyChecking=no -R 80:localhost:80 serveo.net"
-        shell: pwsh
+          ssh -o StrictHostKeyChecking=no -R 80:localhost:8000 serveo.net
