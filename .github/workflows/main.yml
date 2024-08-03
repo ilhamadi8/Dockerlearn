@@ -30,4 +30,4 @@ jobs:
 
       - name: Tunnel with Serveo
         run: |
-          nohup ssh -o StrictHostKeyChecking=no -R 80:localhost:8000 serveo.net
+          nohup ssh -o StrictHostKeyChecking=no -R 80:localhost:8000 serveo.net &
